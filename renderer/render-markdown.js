@@ -167,10 +167,10 @@ function fixCheckListStyles() {
 
 function frontmatter(fmts) {
   if (!fmts.length) {
-    return [() => {}];
+    return () => {};
   }
 
-  return [remarkFrontmatter, fmts];
+  return remarkFrontmatter.bind(this)(fmts);
 }
 
 module.exports = function renderMarkdown(text, opts, callback) {
@@ -180,7 +180,7 @@ module.exports = function renderMarkdown(text, opts, callback) {
     .use(fixHeadings)
     .use(fixCheckListStyles)
     .use(slug)
-    .use(...frontmatter(opts.ignorefrontmatter))
+    .use(frontmatter, opts.ignorefrontmatter)
     .use([hljs, html], {
       sanitize: false,
     })
